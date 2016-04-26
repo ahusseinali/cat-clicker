@@ -24,12 +24,12 @@ var Cat = function(id, name, img) {
 // Returns: The Image to be listened to when clicked.
 Cat.prototype._init = function() {
     var catDiv = document.createElement('div');
+    catDiv.id = 'cat_' + this.id;
     var name = document.createElement('div');
     name.innerHTML = this.name;
     catDiv.appendChild(name);
-
+    catDiv.style.visibility = 'hidden';
     var img = document.createElement('img');
-    img.id = this.id;
     img.setAttribute('src', this.img);
     img.setAttribute('alt', this.name);
     catDiv.appendChild(img);
@@ -54,9 +54,58 @@ Cat.prototype._clicked = function() {
     catElem.innerHTML = this.clicks;
 };
 
+// Class for Cat List Generator
+var CatList = function(names, images) {
+    this.cats = [];
+    for(var i=0; i < names.length; i++) {
+        this.cats.push(new Cat(i, names[i], images[i]));
+    }
+
+    // Initialize Cat List
+    this._init();
+}
+
+// Initialize the Ordered List of Cats and add event listeners.
+CatList.prototype._init = function() {
+    var listElem = document.getElementById('catsList');
+    var self = this;
+    this.cats.forEach(function(cat) {
+        var item = document.createElement('li');
+        item.textContent = cat.name;
+        listElem.appendChild(item);
+        item.addEventListener('click', (function(catObj) {
+            return function(catObj) {
+                self._renderCat(catObj);
+            };
+        })(cat));
+        item.addEventListener('blur', (function(catObj) {
+            return function(catObj) {
+                self._hideCat(catObj);
+            }
+        })(cat));
+    });
+}
+
+// Renders the cat details
+CatList.prototype._renderCat = function(cat) {
+    if(cat) {
+        var catElem = document.getElementById('cat_' + cat.id);
+        catElem.style.visibility = 'visible';
+    }
+};
+
+// Hide the cat div if another cat is selected
+CatList.prototype._hideCat = function(cat) {
+    if(cat) {
+        var catElem = document.getElementById('cat_' + cat.id);
+        catElem.style.visibility = 'hidden';
+    }
+}
+
 function initPage() {
-    var cat1 = new Cat('cat1', 'First Cat', 'img/cat1.jpg');
-    var cat2 = new Cat('cat2', 'Second Cat', 'img/cat2.jpg');
+    var catImages = ['img/cat1.jpg', 'img/cat2.jpg'];
+    var catNames = ['First Cat', 'Second Cat'];
+    var catList = new CatList(catNames, catImages);
 }
 
 document.addEventListener('DOMContentLoaded', initPage, false);
