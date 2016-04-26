@@ -6,9 +6,11 @@ var Cat = function(id, name, img) {
 
     // Initialize DOM Tree with Cat Information.
     var catImgElem = this._init();
-
+    var self = this;
     // Listen to click event on the cat image
-    catImgElem.addEventListener('click', this._clicked);
+    catImgElem.addEventListener('click', function() {
+        self._clicked();
+    });
 }
 
 // Construct DOM elements for the cat
