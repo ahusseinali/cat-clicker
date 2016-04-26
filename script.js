@@ -38,6 +38,7 @@ Cat.prototype._init = function() {
     var clicksText = document.createTextNode('Number of Clicks ');
     var clicksCount = document.createElement('span');
     clicksCount.id = 'click_' + this.id;
+    clicksCount.innerHTML = this.clicks;
     clicksDiv.appendChild(clicksText);
     clicksDiv.appendChild(clicksCount);
     catDiv.appendChild(clicksDiv);
