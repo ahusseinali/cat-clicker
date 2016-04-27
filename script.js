@@ -28,7 +28,7 @@ Cat.prototype._init = function() {
     var name = document.createElement('div');
     name.innerHTML = this.name;
     catDiv.appendChild(name);
-    catDiv.style.visibility = 'hidden';
+    catDiv.style.display = 'none';
     var img = document.createElement('img');
     img.setAttribute('src', this.img);
     img.setAttribute('alt', this.name);
@@ -89,7 +89,7 @@ CatList.prototype._renderCat = function(cat) {
     if(cat) {
         console.log(cat);
         var catElem = document.getElementById('cat_' + cat.id);
-        catElem.style.visibility = 'visible';
+        catElem.style.display = 'block';
     }
     this.selectedIndex = cat ? cat.id : -1;
 };
@@ -98,10 +98,11 @@ CatList.prototype._renderCat = function(cat) {
 CatList.prototype._hideCat = function(cat) {
     if(cat) {
         var catElem = document.getElementById('cat_' + cat.id);
-        catElem.style.visibility = 'hidden';
+        catElem.style.display = 'none';
     }
 }
 
+// Main Entry Point to Creating and handling the cats list.
 function initPage() {
     var catImages = ['img/cat1.jpg', 'img/cat2.jpg'];
     var catNames = ['First Cat', 'Second Cat'];
