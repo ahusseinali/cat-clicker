@@ -73,22 +73,19 @@ CatList.prototype._init = function() {
         var item = document.createElement('li');
         item.textContent = cat.name;
         listElem.appendChild(item);
-        item.addEventListener('click', (function(catObj) {
-            return function(catObj) {
-                self._renderCat(catObj);
-            };
-        })(cat));
-        item.addEventListener('blur', (function(catObj) {
-            return function(catObj) {
-                self._hideCat(catObj);
-            }
-        })(cat));
+        item.addEventListener('click', function() {
+            self._renderCat(cat);
+        });
+        item.addEventListener('blur', function() {
+            self._hideCat(cat);
+        });
     });
 }
 
 // Renders the cat details
 CatList.prototype._renderCat = function(cat) {
     if(cat) {
+        console.log(cat);
         var catElem = document.getElementById('cat_' + cat.id);
         catElem.style.visibility = 'visible';
     }
