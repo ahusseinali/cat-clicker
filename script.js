@@ -104,8 +104,14 @@ CatList.prototype._hideCat = function(cat) {
 
 // Main Entry Point to Creating and handling the cats list.
 function initPage() {
-    var catImages = ['img/cat1.jpg', 'img/cat2.jpg'];
-    var catNames = ['First Cat', 'Second Cat'];
+    var catImages = [
+        'img/cat1.jpg',
+        'img/cat2.jpg',
+        'img/itza.jpg',
+        'img/taj.jpg',
+        'img/pyramids.jpg'
+    ];
+    var catNames = ['First Cat', 'Second Cat', 'Itza', 'Taj Mahal', 'Pyramids of Giza'];
     var catList = new CatList(catNames, catImages);
 }
 
