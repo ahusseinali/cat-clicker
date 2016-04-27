@@ -61,6 +61,7 @@ var CatList = function(names, images) {
         this.cats.push(new Cat(i, names[i], images[i]));
     }
 
+    this.selectedIndex = -1;
     // Initialize Cat List
     this._init();
 }
@@ -76,19 +77,21 @@ CatList.prototype._init = function() {
         item.addEventListener('click', function() {
             self._renderCat(cat);
         });
-        item.addEventListener('blur', function() {
-            self._hideCat(cat);
-        });
     });
 }
 
 // Renders the cat details
 CatList.prototype._renderCat = function(cat) {
+    if(this.selectedIndex >= 0) {
+        // Hide the current cat.
+        this._hideCat(this.cats[this.selectedIndex])
+    }
     if(cat) {
         console.log(cat);
         var catElem = document.getElementById('cat_' + cat.id);
         catElem.style.visibility = 'visible';
     }
+    this.selectedIndex = cat ? cat.id : -1;
 };
 
 // Hide the cat div if another cat is selected
