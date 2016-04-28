@@ -36,7 +36,6 @@ CatsModel.prototype.updateSelected = function(cat) {
     selected.name = cat.name;
     selected.img = cat.img;
     selected.clicks = cat.clicks;
-
 }
 
 // Manager that controls flow od data between views and model
@@ -44,11 +43,13 @@ var CatManager = function() {
     this.model = new CatsModel();
     this.listView = new ListView(this);
     this.detailView = new DetailView(this);
+    this.adminView = new AdminView(this);
 };
 
 CatManager.prototype.init = function() {
     this.listView.render();
     this.detailView.init();
+    this.adminView.init();
 };
 
 CatManager.prototype.getCatNames = function() {
@@ -74,9 +75,14 @@ CatManager.prototype.getCurrentCat = function() {
     return this.model.getSelected();
 };
 
-CatManager.prototype.updateSelected = function() {
+CatManager.prototype.updateSelected = function(cat) {
     this.model.updateSelected(cat);
+    this.detailView.render();
 };
+
+CatManager.prototype.adminClicked = function() {
+    this.adminView.render();
+}
 
 
 // The view responsible for constructing and displaying the list
@@ -110,6 +116,7 @@ var DetailView = function(controller) {
     this.nameElem = document.getElementById('name');
     this.picElem = document.getElementById('pic');
     this.clicksElem = document.getElementById('clicks');
+    this.adminBtn = document.getElementById('adminBtn');
     this.controller = controller;
 }
 
@@ -120,6 +127,12 @@ DetailView.prototype.init = function() {
         return function() {
             controller.detailsCallback();
         };
+    })(this.controller));
+
+    this.adminBtn.addEventListener('click', (function(controller) {
+        return function() {
+            controller.adminClicked();
+        }
     })(this.controller));
 };
 
@@ -149,25 +162,42 @@ AdminView = function(controller) {
 
 // Add Event Listeners to Save and Cancel
 AdminView.prototype.init = function() {
-    this.cancel.addEventListener('click', this._hide);
-    this.save.addEventListener('click', this._save);
+    this.cancel.addEventListener('click', (function(view) {
+        return function() {
+            view._hide();
+        };
+    })(this));
+    this.save.addEventListener('click', (function(view) {
+        return function() {
+            view._save();
+        };
+    })(this));
+};
+
+AdminView.prototype.render = function() {
+    var cat = this.controller.getCurrentCat();
+    this.nameTxt.value = cat.name;
+    this.imgTxt.value = cat.img;
+    this.clicksTxt.value = cat.clicks;
+    this.admin.style.display = 'block';
+};
 
 // Clear all text information and hide panel
 AdminView.prototype._hide = function() {
     this.nameTxt.value = '';
     this.imgTxt.value = '';
     this.clicksTxt.value = '';
-    this.admin.display = none;
-}
+    this.admin.style.display = 'none';
+};
 
-AdminView.prototype._save() = function() {
+AdminView.prototype._save = function() {
     var cat = {};
     cat.name = this.nameTxt.value;
     cat.img = this.imgTxt.value;
-    cat.clicks = this.imgTxt.clicks;
+    cat.clicks = this.imgTxt.value;
     this.controller.updateSelected(cat);
     this._hide();
-}
+};
 
 var controller = new CatManager();
 controller.init();
