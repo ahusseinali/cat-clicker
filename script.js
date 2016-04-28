@@ -4,46 +4,66 @@ var Cat = function(name, img) {
     this.clicks = 0;
 }
 
+CatsModel = function() {
+    this._cats = [
+        new Cat('First Cat', 'img/cat1.jpg'),
+        new Cat('Second Cat', 'img/cat2.jpg'),
+        new Cat('Itza', 'img/itza.jpg'),
+        new Cat('Taj Mahal', 'img/taj.jpg'),
+        new Cat('Giza Pyramids', 'img/pyramids.jpg')
+    ];
+    this._selected = -1;
+}
+
+CatsModel.prototype.getCats = function() {
+    return this._cats;
+}
+
+CatsModel.prototype.getSelected = function() {
+    return this._cats[this._selected];
+}
+
+CatsModel.prototype.setSelected = function(index) {
+    this._selected = index;
+}
+
+CatsModel.prototype.incrementClicks = function() {
+    this._cats[this._selected].clicks++;
+}
+
 // Manager that controls flow od data between views and model
 var CatManager = function() {
-    this.cats = [];
-    this.selected = -1;
+    this.model = new CatsModel();
     this.listView = new ListView(this);
     this.detailView = new DetailView(this);
 };
 
-CatManager.prototype.add = function(name, pic) {
-    this.cats.push(new Cat(name, pic));
-    // this.listView.init(this.cats);
-};
-
 CatManager.prototype.init = function() {
-    var catNames = this.cats.map(function(cat) {
-        return cat.name;
-    })
-    this.listView.init(catNames);
+    this.listView.render();
     this.detailView.init();
 };
 
+CatManager.prototype.getCatNames = function() {
+    return this.model.getCats().map(function(cat) {
+        return cat.name;
+    });
+}
+
 // The callback to be called when list item is clicked.
 CatManager.prototype.listCallback = function(index) {
-    this.selected = index;
+    this.model.setSelected(index);
     this.detailView.render();
 };
 
 // Increment the clicks value of the cat and re-render the details.
 CatManager.prototype.detailsCallback = function() {
-    this.cats[this.selected].clicks++;
+    this.model.incrementClicks();
     this.detailView.render();
 }
 
 // Returns the currently selected cat object.
 CatManager.prototype.getCurrentCat = function() {
-    if(this.selected < 0 || this.selected >= this.cats.length) {
-        return null;
-    }
-
-    return this.cats[this.selected];
+    return this.model.getSelected();
 }
 
 
@@ -54,7 +74,8 @@ var ListView = function(controller) {
 }
 
 // Construct the HTML List of cat names and set items listeners to the callback function
-ListView.prototype.init = function(names) {
+ListView.prototype.render = function() {
+    var names = this.controller.getCatNames();
     var index = 0;
     var self = this;
     this.listElem.innerHTML = '';
@@ -104,22 +125,5 @@ DetailView.prototype.render = function() {
     }
 };
 
-// Main Entry Point to Creating and handling the cats list.
-function initPage() {
-    var catImages = [
-        'img/cat1.jpg',
-        'img/cat2.jpg',
-        'img/itza.jpg',
-        'img/taj.jpg',
-        'img/pyramids.jpg'
-    ];
-    var catNames = ['First Cat', 'Second Cat', 'Itza', 'Taj Mahal', 'Pyramids of Giza'];
-    var controller = new CatManager();
-    for(var i=0; i < catImages.length; i++) {
-        controller.add(catNames[i], catImages[i]);
-    }
-
-    controller.init();
-}
-
-document.addEventListener('DOMContentLoaded', initPage, false);
+var controller = new CatManager();
+controller.init();
