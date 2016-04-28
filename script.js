@@ -31,6 +31,14 @@ CatsModel.prototype.incrementClicks = function() {
     this._cats[this._selected].clicks++;
 }
 
+CatsModel.prototype.updateSelected = function(cat) {
+    var selected = this.getSelected();
+    selected.name = cat.name;
+    selected.img = cat.img;
+    selected.clicks = cat.clicks;
+
+}
+
 // Manager that controls flow od data between views and model
 var CatManager = function() {
     this.model = new CatsModel();
@@ -47,7 +55,7 @@ CatManager.prototype.getCatNames = function() {
     return this.model.getCats().map(function(cat) {
         return cat.name;
     });
-}
+};
 
 // The callback to be called when list item is clicked.
 CatManager.prototype.listCallback = function(index) {
@@ -59,12 +67,16 @@ CatManager.prototype.listCallback = function(index) {
 CatManager.prototype.detailsCallback = function() {
     this.model.incrementClicks();
     this.detailView.render();
-}
+};
 
 // Returns the currently selected cat object.
 CatManager.prototype.getCurrentCat = function() {
     return this.model.getSelected();
-}
+};
+
+CatManager.prototype.updateSelected = function() {
+    this.model.updateSelected(cat);
+};
 
 
 // The view responsible for constructing and displaying the list
@@ -124,6 +136,38 @@ DetailView.prototype.render = function() {
         this.detailsElem.style.display = 'none';
     }
 };
+
+AdminView = function(controller) {
+    this.admin = document.getElementById('admin');
+    this.nameTxt = document.getElementById('nameTxt');
+    this.imgTxt = document.getElementById('imgTxt');
+    this.clicksTxt = document.getElementById('clicksTxt');
+    this.save = document.getElementById('save');
+    this.cancel = document.getElementById('cancel');
+    this.controller = controller;
+};
+
+// Add Event Listeners to Save and Cancel
+AdminView.prototype.init = function() {
+    this.cancel.addEventListener('click', this._hide);
+    this.save.addEventListener('click', this._save);
+
+// Clear all text information and hide panel
+AdminView.prototype._hide = function() {
+    this.nameTxt.value = '';
+    this.imgTxt.value = '';
+    this.clicksTxt.value = '';
+    this.admin.display = none;
+}
+
+AdminView.prototype._save() = function() {
+    var cat = {};
+    cat.name = this.nameTxt.value;
+    cat.img = this.imgTxt.value;
+    cat.clicks = this.imgTxt.clicks;
+    this.controller.updateSelected(cat);
+    this._hide();
+}
 
 var controller = new CatManager();
 controller.init();
