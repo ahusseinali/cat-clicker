@@ -31,8 +31,10 @@ CatManager.prototype.listCallback = function(index) {
     this.detailView.render();
 };
 
+// Increment the clicks value of the cat and re-render the details.
 CatManager.prototype.detailsCallback = function() {
     this.cats[this.selected].clicks++;
+    this.detailView.render();
 }
 
 // Returns the currently selected cat object.
