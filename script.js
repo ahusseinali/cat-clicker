@@ -194,7 +194,7 @@ AdminView.prototype._save = function() {
     var cat = {};
     cat.name = this.nameTxt.value;
     cat.img = this.imgTxt.value;
-    cat.clicks = this.imgTxt.value;
+    cat.clicks = this.clicksTxt.value;
     this.controller.updateSelected(cat);
     this._hide();
 };
