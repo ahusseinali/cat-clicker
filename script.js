@@ -44,6 +44,7 @@ var CatManager = function() {
     this.listView = new ListView(this);
     this.detailView = new DetailView(this);
     this.adminView = new AdminView(this);
+    this.adminOn = false;
 };
 
 CatManager.prototype.init = function() {
@@ -62,6 +63,9 @@ CatManager.prototype.getCatNames = function() {
 CatManager.prototype.listCallback = function(index) {
     this.model.setSelected(index);
     this.detailView.render();
+    if(this.adminOn) {
+        this.adminView.render();
+    }
 };
 
 // Increment the clicks value of the cat and re-render the details.
@@ -82,6 +86,11 @@ CatManager.prototype.updateSelected = function(cat) {
 
 CatManager.prototype.adminClicked = function() {
     this.adminView.render();
+    this.adminOn = true;
+}
+
+CatManager.prototype.adminHidden = function() {
+    this.adminOn = false;
 }
 
 
@@ -188,6 +197,7 @@ AdminView.prototype._hide = function() {
     this.imgTxt.value = '';
     this.clicksTxt.value = '';
     this.admin.style.display = 'none';
+    this.controller.adminHidden();
 };
 
 AdminView.prototype._save = function() {
