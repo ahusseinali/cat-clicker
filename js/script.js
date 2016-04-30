@@ -18,14 +18,12 @@ var CatViewModel = function() {
 }
 
 CatViewModel.prototype.checkCatSelected = function() {
-    console.log('selection is ' + this.selected());
     return this.selected() > -1;
 }
 
 CatViewModel.prototype.selectCat = function(index) {
     this.selected(index);
     this.currentCat(this.cats()[this.selected()]);
-    console.log(this.currentCat());
 }
 
 CatViewModel.prototype.incrementClicks = function() {
