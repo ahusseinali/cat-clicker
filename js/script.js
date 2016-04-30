@@ -4,93 +4,22 @@ var Cat = function(name, img) {
     this.clicks = 0;
 }
 
-CatsModel = function() {
-    this._cats = [
+var CatViewModel = function() {
+    this.cats = ko.observableArray([
         new Cat('First Cat', 'img/cat1.jpg'),
         new Cat('Second Cat', 'img/cat2.jpg'),
         new Cat('Itza', 'img/itza.jpg'),
         new Cat('Taj Mahal', 'img/taj.jpg'),
         new Cat('Giza Pyramids', 'img/pyramids.jpg')
-    ];
-    this._selected = -1;
+    ]);
+    this.selected = -1;
 }
 
-CatsModel.prototype.getCats = function() {
-    return this._cats;
-}
-
-CatsModel.prototype.getSelected = function() {
-    return this._cats[this._selected];
-}
-
-CatsModel.prototype.setSelected = function(index) {
-    this._selected = index;
-}
-
-CatsModel.prototype.incrementClicks = function() {
-    this._cats[this._selected].clicks++;
-}
-
-CatsModel.prototype.updateSelected = function(cat) {
-    var selected = this.getSelected();
-    selected.name = cat.name;
-    selected.img = cat.img;
-    selected.clicks = cat.clicks;
-}
-
-// Manager that controls flow od data between views and model
-var CatManager = function() {
-    this.model = new CatsModel();
-    this.listView = new ListView(this);
-    this.detailView = new DetailView(this);
-    this.adminView = new AdminView(this);
-    this.adminOn = false;
-};
-
-CatManager.prototype.init = function() {
-    this.listView.render();
-    this.detailView.init();
-    this.adminView.init();
-};
-
-CatManager.prototype.getCatNames = function() {
-    return this.model.getCats().map(function(cat) {
-        return cat.name;
-    });
-};
-
-// The callback to be called when list item is clicked.
-CatManager.prototype.listCallback = function(index) {
-    this.model.setSelected(index);
-    this.detailView.render();
-    if(this.adminOn) {
-        this.adminView.render();
+CatViewModel.prototype.incrementClicks = function() {
+    if(this.selected == -1) {
+        return;
     }
-};
-
-// Increment the clicks value of the cat and re-render the details.
-CatManager.prototype.detailsCallback = function() {
-    this.model.incrementClicks();
-    this.detailView.render();
-};
-
-// Returns the currently selected cat object.
-CatManager.prototype.getCurrentCat = function() {
-    return this.model.getSelected();
-};
-
-CatManager.prototype.updateSelected = function(cat) {
-    this.model.updateSelected(cat);
-    this.detailView.render();
-};
-
-CatManager.prototype.adminClicked = function() {
-    this.adminView.render();
-    this.adminOn = true;
-}
-
-CatManager.prototype.adminHidden = function() {
-    this.adminOn = false;
+    this.cats()[this.selected].clicks++;
 }
 
 
@@ -209,5 +138,5 @@ AdminView.prototype._save = function() {
     this._hide();
 };
 
-var controller = new CatManager();
-controller.init();
+var viewModel = new CatViewModel();
+ko.applyBindings(viewModel);
