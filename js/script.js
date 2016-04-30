@@ -12,14 +12,27 @@ var CatViewModel = function() {
         new Cat('Taj Mahal', 'img/taj.jpg'),
         new Cat('Giza Pyramids', 'img/pyramids.jpg')
     ]);
-    this.selected = -1;
+    this.selected = ko.observable(-1);
+    this.isCatSelected = ko.computed(this.checkCatSelected, this);
+    this.currentCat = ko.observable(null);
+}
+
+CatViewModel.prototype.checkCatSelected = function() {
+    console.log('selection is ' + this.selected());
+    return this.selected() > -1;
+}
+
+CatViewModel.prototype.selectCat = function(index) {
+    this.selected(index);
+    this.currentCat(this.cats()[this.selected()]);
+    console.log(this.currentCat());
 }
 
 CatViewModel.prototype.incrementClicks = function() {
-    if(this.selected == -1) {
+    if(this.selected() == -1) {
         return;
     }
-    this.cats()[this.selected].clicks++;
+    this.currentCat().clicks++;
 }
 
 

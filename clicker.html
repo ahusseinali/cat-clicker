@@ -7,13 +7,15 @@
 </head>
 <body>
     <ol data-bind="foreach: cats">
-        <li data-bind="text: name"></li>
+        <li data-bind="text: name, click: function() { $parent.selectCat($index()); }"></li>
     </ol>
-    <div id="details">
-        <h2 id="name"></h2>
-        <div>Number of clicks: <span id="clicks"></span></div>
-        <img id="pic">
+    <div data-bind="with: currentCat">
+        <!-- ko if: $parent.isCatSelected -->
+        <h2 data-bind="text: name"></h2>
+        <div>Number of clicks: <span data-bind="text: clicks"></span></div>
+        <img src="" alt="" data-bind="attr: { src: img, alt: name }">
         <button id="adminBtn">Admin</button>
+        <!-- /ko -->
     </div>
     <div id="admin" style="display: none">
         <div>Name <input id="nameTxt" type="text"></div>
