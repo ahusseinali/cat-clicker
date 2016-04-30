@@ -1,7 +1,7 @@
 var Cat = function(name, img) {
-    this.name = name;
-    this.img = img;
-    this.clicks = 0;
+    this.name = ko.observable(name);
+    this.img = ko.observable(img);
+    this.clicks = ko.observable(0);
 }
 
 var CatViewModel = function() {
@@ -30,7 +30,7 @@ CatViewModel.prototype.incrementClicks = function() {
     if(this.selected() == -1) {
         return;
     }
-    this.currentCat().clicks++;
+    this.currentCat().clicks(this.currentCat().clicks() + 1);
 }
 
 
