@@ -13,7 +13,7 @@ Cat.prototype.copyTo = function(obj) {
 Cat.prototype.copyFrom = function(obj) {
     this.name(obj.name());
     this.img(obj.img());
-    this.clicks(obj.clicks())
+    this.clicks(parseInt(obj.clicks()));
 }
 
 var CatViewModel = function() {
