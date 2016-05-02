@@ -14,15 +14,15 @@
         <h2 data-bind="text: name"></h2>
         <div>Number of clicks: <span data-bind="text: clicks"></span></div>
         <img src="" alt="" data-bind="click: $parent.incrementClicks.bind($parent), attr: { src: img, alt: name }">
-        <button id="adminBtn">Admin</button>
+        <button data-bind="click: $parent.showAdmin.bind($parent)">Admin</button>
         <!-- /ko -->
     </div>
-    <div id="admin" style="display: none">
-        <div>Name <input id="nameTxt" type="text"></div>
-        <div>Image <input id="imgTxt" type="text"></div>
-        <div>Clicks # <input id="clicksTxt" type="text"></div>
-        <button id="cancel">Cancel</button>
-        <button id="save">Save</button>
+    <div data-bind="visible: isAdminOn, with: adminCat">
+        <div>Name <input type="text" data-bind="value: name"></div>
+        <div>Image <input type="text" data-bind="value: img"></div>
+        <div>Clicks # <input type="text" data-bind="value: clicks"></div>
+        <button data-bind="click: $parent.hideAdmin.bind($parent)">Cancel</button>
+        <button data-bind="click: $parent.saveAdmin.bind($parent)">Save</button>
     </div>
     <script src="js/script.js"></script>
 </body>
